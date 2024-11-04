@@ -34,15 +34,16 @@ const has4Vertical = (
   symbol: string,
   matrix: string[][],
   rows: number,
+  columns: number,
   setConnected: React.Dispatch<React.SetStateAction<number[]>>
 ) => {
   let count = 1;
-  let indexes = [rowIndex * rows + columnIndex];
+  let indexes = [rowIndex * columns + columnIndex];
 
   // Check upwards
   for (let i = rowIndex - 1; i >= 0 && matrix[i][columnIndex] === symbol; i--) {
     count++;
-    indexes.push(i * rows + columnIndex);
+    indexes.push(i * columns + columnIndex);
   }
 
   // Check downwards
@@ -52,7 +53,7 @@ const has4Vertical = (
     i++
   ) {
     count++;
-    indexes.push(i * rows + columnIndex);
+    indexes.push(i * columns + columnIndex);
   }
 
   if (count >= 4) {
@@ -146,7 +147,15 @@ export const checkForWin = (
       setConnected,
       rowIndex
     ) ||
-    has4Vertical(columnIndex, rowIndex, symbol, matrix, rows, setConnected) ||
+    has4Vertical(
+      columnIndex,
+      rowIndex,
+      symbol,
+      matrix,
+      rows,
+      columns,
+      setConnected
+    ) ||
     has4Diagonal(
       rowIndex,
       columnIndex,
