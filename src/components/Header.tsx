@@ -5,8 +5,8 @@ import logo from "../assets/images/logo.svg";
 const Header = () => {
   return (
     <Container>
-      <Button>menu</Button>
-      <Image src={logo} />
+      <Button $marginRight>menu</Button>
+      <img alt="" src={logo} />
       <Button>restart</Button>
     </Container>
   );
@@ -16,17 +16,21 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 2.5rem;
-  margin-bottom: 2rem;
-  max-width: 632px;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  width: 632px;
 `;
-const Button = styled.button`
+const Button = styled.button<{ $marginRight?: boolean }>`
   text-transform: uppercase;
   padding: 0 20px;
   border-radius: 20px;
-  background-color: var(--bg-footer / 1);
-  color: var(--color-white/ 1);
+  background-color: var(--footer-opacity);
+  color: var(--white-opacity);
+  border: 0 solid;
+  height: 40px;
+  font-size: 100%;
+  font-weight: bold;
+  margin-right: ${(props) => (props.$marginRight ? "27px" : "0")};
 `;
-const Image = styled.img``;
 
 export default Header;
