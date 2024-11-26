@@ -48,6 +48,7 @@ const Container = styled.button`
   background-color: transparent;
   align-items: center;
   border-color: transparent;
+  cursor: pointer;
 `;
 
 const Round = styled.div`

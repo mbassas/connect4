@@ -39,6 +39,11 @@ const Button = styled.button<{ $marginRight?: boolean }>`
   font-size: 100%;
   font-weight: bold;
   margin-right: ${(props) => (props.$marginRight ? "27px" : "0")};
+  cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: var(--bg-player-one);
+  }
 `;
 
 export default Header;
