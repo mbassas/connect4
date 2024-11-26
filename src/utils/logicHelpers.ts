@@ -1,9 +1,8 @@
-const has4Horizontal = (
+export const find4Horizontal = (
   row: string[],
   columnIndex: number,
   symbol: string,
   columns: number,
-  setConnected: React.Dispatch<React.SetStateAction<number[]>>,
   rowIndex: number
 ) => {
   let count = 1; // Start with the current disc
@@ -22,20 +21,19 @@ const has4Horizontal = (
   }
 
   if (count >= 4) {
-    setConnected(indexes);
+    return indexes; // 4 in a row
   }
 
-  return count >= 4; // Return true if 4 or more consecutive discs are found
+  return undefined; // No 4 in a row
 };
 
-const has4Vertical = (
+export const find4Vertical = (
   columnIndex: number,
   rowIndex: number,
   symbol: string,
   matrix: string[][],
   rows: number,
-  columns: number,
-  setConnected: React.Dispatch<React.SetStateAction<number[]>>
+  columns: number
 ) => {
   let count = 1;
   let indexes = [rowIndex * columns + columnIndex];
@@ -57,19 +55,18 @@ const has4Vertical = (
   }
 
   if (count >= 4) {
-    setConnected(indexes);
+    return indexes; // 4 in a row
   }
 
-  return count >= 4;
+  return undefined; // No 4 in a row
 };
-const has4Diagonal = (
+export const find4Diagonal = (
   rowIndex: number,
   columnIndex: number,
   symbol: string,
   matrix: string[][],
   rows: number,
-  columns: number,
-  setConnected: React.Dispatch<React.SetStateAction<number[]>>
+  columns: number
 ) => {
   let count = 1;
   let indexes = [rowIndex * columns + columnIndex];
@@ -95,8 +92,7 @@ const has4Diagonal = (
   }
 
   if (count >= 4) {
-    setConnected(indexes);
-    return true;
+    return indexes; // 4 in a row
   }
 
   //reset count and indexes for Ul/DR checks
@@ -123,47 +119,8 @@ const has4Diagonal = (
     indexes.push(i * columns + j);
   }
   if (count >= 4) {
-    setConnected(indexes);
+    return indexes; // 4 in a row
   }
 
-  return count >= 4;
-};
-
-export const checkForWin = (
-  matrix: string[][],
-  rowIndex: number,
-  columnIndex: number,
-  symbol: string,
-  rows: number,
-  columns: number,
-  setConnected: React.Dispatch<React.SetStateAction<number[]>>
-) => {
-  return (
-    has4Horizontal(
-      matrix[rowIndex],
-      columnIndex,
-      symbol,
-      columns,
-      setConnected,
-      rowIndex
-    ) ||
-    has4Vertical(
-      columnIndex,
-      rowIndex,
-      symbol,
-      matrix,
-      rows,
-      columns,
-      setConnected
-    ) ||
-    has4Diagonal(
-      rowIndex,
-      columnIndex,
-      symbol,
-      matrix,
-      rows,
-      columns,
-      setConnected
-    )
-  );
+  return undefined; // No 4 in a row
 };

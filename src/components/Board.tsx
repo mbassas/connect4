@@ -1,49 +1,47 @@
 import styled from "styled-components";
 import largeLayerBlack from "../assets/images/board-layer-black-large.svg";
 import largeLayerWhite from "../assets/images/board-layer-white-large.svg";
-import { useCallback, useState } from "react";
-import placeItem from "../utils/placeItemLogic";
+import { useCallback } from "react";
 import Cell from "./Cell";
+import { useDispatch, useSelector } from "react-redux";
+import { clickColumn, setHoveredColumn } from "../connect4Slice";
+import { RootState } from "../store";
 
 const Board = () => {
-  const columns = 7;
-  const rows = 6;
-
-  const [matrix, setMatrix] = useState<string[][]>(() =>
-    Array(rows)
-      .fill(null)
-      .map(() => Array(columns).fill("*"))
-  );
-  const [isUserA, setIsUserA] = useState(true);
-  const [connected, setConnected] = useState<number[]>([]);
+  const dispatch = useDispatch();
+  const board = useSelector((state: RootState) => state.connect4.board);
 
   //handle actions
   const handleColumnClick = useCallback(
     (columnNumber: number) => {
-      placeItem(
-        matrix,
-        columnNumber,
-        rows,
-        columns,
-        isUserA,
-        setMatrix,
-        setIsUserA,
-        setConnected
-      );
+      dispatch(clickColumn(columnNumber));
     },
-    [matrix, isUserA]
+    [dispatch]
   );
+
+  const handleMouseEnter = useCallback(
+    (columnIndex: number) => {
+      dispatch(setHoveredColumn(columnIndex));
+    },
+    [dispatch]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    dispatch(setHoveredColumn(null));
+  }, [dispatch]);
+
   return (
     <RelativeContainer>
       <Container>
-        {matrix.map((row, rowIndex) =>
+        {board.map((row, rowIndex) =>
           row.map((cell, cellIndex) => (
             <Cell
-              key={cellIndex}
+              key={`${rowIndex}-${cellIndex}`}
               cellIndex={cellIndex}
               rowIndex={rowIndex}
+              onMouseEnter={() => handleMouseEnter(cellIndex)}
+              onMouseLeave={handleMouseLeave}
               handleColumnClick={handleColumnClick}
-              connected={connected}
             >
               {cell}
             </Cell>

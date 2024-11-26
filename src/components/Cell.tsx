@@ -1,24 +1,33 @@
 import styled from "styled-components";
 import golyored from "../assets/images/counter-red-large.svg";
 import golyoyellow from "../assets/images/counter-yellow-large.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface CellProps {
   cellIndex: number;
   handleColumnClick: (cellIndex: number) => void;
   children: React.ReactNode;
-  connected: number[];
   rowIndex: number;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
 }
 
 const Cell: React.FC<CellProps> = ({
   cellIndex,
   handleColumnClick,
   children,
-  connected,
   rowIndex,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
+  const connected = useSelector((state: RootState) => state.connect4.connected);
   return (
-    <Container onClick={() => handleColumnClick(cellIndex)}>
+    <Container
+      onClick={() => handleColumnClick(cellIndex)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {children === "X" && <Image src={golyored} className="drop"></Image>}
       {children === "O" && <Image src={golyoyellow} className="drop"></Image>}
       {children === "*" && null}

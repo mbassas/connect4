@@ -1,21 +1,76 @@
 import styled from "styled-components";
 import turnBackgroundYellow from "../assets/images/turn-background-yellow.svg";
+import turnBackgroundRed from "../assets/images/turn-background-red.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { setTimer, setWinner, startGame } from "../connect4Slice";
+import { useCallback, useEffect } from "react";
 
-const Footer: React.FC<{ winner: number }> = ({ winner }) => {
+const Footer = () => {
+  const currentPlayer = useSelector(
+    (state: RootState) => state.connect4.currentPlayer
+  );
+  const winner = useSelector((state: RootState) => state.connect4.winner);
+  const gameActive = useSelector(
+    (state: RootState) => state.connect4.activeGame
+  );
+  const timer = useSelector((state: RootState) => state.connect4.timer);
+  const dispatch = useDispatch();
+
+  const handleStartGame = useCallback(() => {
+    dispatch(startGame());
+    dispatch(setTimer(30));
+  }, [dispatch]);
+
+  // Timer effect
+  useEffect(() => {
+    if (!gameActive) return; // Stop timer if the game is inactive
+
+    const interval = setInterval(() => {
+      if (timer === 1) {
+        const otherPlayer = currentPlayer === 1 ? 2 : 1;
+        dispatch(setWinner(otherPlayer));
+        clearInterval(interval);
+      } else {
+        dispatch(setTimer(timer - 1));
+      }
+    }, 1000);
+
+    return () => clearInterval(interval); // Cleanup on unmount or re-render
+  }, [gameActive, currentPlayer, dispatch, timer]);
+
+  // Reset timer on player change
+  useEffect(() => {
+    if (gameActive) dispatch(setTimer(30));
+  }, [currentPlayer, dispatch, gameActive]);
+
   return (
     <Container>
-      {/* <Panel>
-         <Text>Player {winner}</Text>
-        <Bold>WINS</Bold> 
-        {/* <Button>play again</Button> 
-      </Panel>*/}
-      <TurnPanel>
-        <Image src={turnBackgroundYellow} alt="" />
-        <TextContainer>
-          <Text $uppercase>player {winner}'s turn</Text>
-          <Bold>16s</Bold>
-        </TextContainer>
-      </TurnPanel>
+      {!gameActive && (
+        <Panel>
+          <Text>Player {winner}</Text>
+          <Bold>WINS</Bold>
+          <Button onClick={handleStartGame}>play again</Button>
+        </Panel>
+      )}
+      {gameActive && currentPlayer === 1 && (
+        <TurnPanel>
+          <Image src={turnBackgroundRed} alt="" />
+          <TextContainer $currentPlayer={1}>
+            <Text $uppercase>player {currentPlayer}'s turn</Text>
+            <Bold>{timer}s</Bold>
+          </TextContainer>
+        </TurnPanel>
+      )}
+      {gameActive && currentPlayer === 2 && (
+        <TurnPanel>
+          <Image src={turnBackgroundYellow} alt="" />
+          <TextContainer $currentPlayer={2}>
+            <Text $uppercase>player {currentPlayer}'s turn</Text>
+            <Bold>{timer}s</Bold>
+          </TextContainer>
+        </TurnPanel>
+      )}
     </Container>
   );
 };
@@ -56,9 +111,11 @@ const TurnPanel = styled.div`
   z-index: 40;
 `;
 
-const TextContainer = styled.div`
+const TextContainer = styled.div<{ $currentPlayer?: number }>`
   position: absolute;
   top: 3rem;
+  color: ${({ $currentPlayer }) =>
+    $currentPlayer === 1 ? "var(--color-white)" : "var(--color-black)"};
 `;
 
 const Text = styled.span<{ $uppercase?: boolean }>`

@@ -1,16 +1,25 @@
-import React from "react";
 import styled from "styled-components";
 import markerYellow from "../assets/images/marker-yellow.svg";
 import markerRed from "../assets/images/marker-red.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const ColumnSelector = () => {
-  const columns = 7;
+  const columns = useSelector((state: RootState) => state.connect4.columns);
+  const currentPlayer = useSelector(
+    (state: RootState) => state.connect4.currentPlayer
+  );
+  const hoveredColumn = useSelector(
+    (state: RootState) => state.connect4.hoveredColumn
+  );
+
   return (
     <Container>
       {Array.from({ length: columns }, (_, column) => (
         <Selector key={column}>
-          <img src={markerYellow} alt="" />
-          {/* <Image src={markerRed} alt="" /> */}
+          {hoveredColumn === column && (
+            <img src={currentPlayer === 2 ? markerYellow : markerRed} alt="" />
+          )}
         </Selector>
       ))}
     </Container>

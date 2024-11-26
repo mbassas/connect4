@@ -14,6 +14,7 @@ body {
   --bg-player-one: rgb(253, 102, 135);
   --bg-player-two: rgb(255, 206, 103);
   --color-white: rgb(255, 255, 255);
+  --color-black: rgb(0, 0, 0);
   --text-opacity: 1;
   --white-opacity: rgba(255, 255, 255, var(--text-opacity));
   --footer-opacity: rgba(92, 45, 213, var(--text-opacity));

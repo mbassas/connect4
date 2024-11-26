@@ -4,8 +4,14 @@ import Header from "./Header";
 import PlayerCounters from "./PlayerCounters";
 import ColumnSelector from "./ColumnSelector";
 import Footer from "./Footer";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
-const Panel = () => {
+const Game = () => {
+  const currentPlayer = useSelector(
+    (state: RootState) => state.connect4.currentPlayer
+  );
+
   return (
     <>
       <Container>
@@ -13,9 +19,9 @@ const Panel = () => {
         <PlayerCounters />
         <ColumnSelector />
         <Board />
-        <Footer winner={1} />
+        <Footer />
       </Container>
-      <FooterBackground />
+      <FooterBackground $currentPlayer={currentPlayer} />
     </>
   );
 };
@@ -26,7 +32,13 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const FooterBackground = styled.div`
+const FooterBackground = styled.div<{ $currentPlayer: number }>`
+  background-color: ${(props) =>
+    props.$currentPlayer === 0
+      ? "var(--footer-opacity)"
+      : props.$currentPlayer === 1
+      ? "var(bg-player-one)"
+      : "var(--bg-player-two)"};
   background-color: var(--footer-opacity);
   height: 250px;
   border-top-left-radius: 100px;
@@ -37,4 +49,4 @@ const FooterBackground = styled.div`
   width: 100vw;
 `;
 
-export default Panel;
+export default Game;

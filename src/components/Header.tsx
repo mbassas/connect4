@@ -1,13 +1,21 @@
-import React from "react";
 import styled from "styled-components";
 import logo from "../assets/images/logo.svg";
+import { useDispatch } from "react-redux";
+import { restartGame, setTimer } from "../connect4Slice";
 
 const Header = () => {
+  const dispatch = useDispatch();
+
+  const handleRestartGame = () => {
+    dispatch(restartGame());
+    dispatch(setTimer(30));
+  };
+
   return (
     <Container>
       <Button $marginRight>menu</Button>
       <img alt="" src={logo} />
-      <Button>restart</Button>
+      <Button onClick={handleRestartGame}>restart</Button>
     </Container>
   );
 };
