@@ -22,11 +22,15 @@ const Cell: React.FC<CellProps> = ({
   onMouseLeave,
 }) => {
   const connected = useSelector((state: RootState) => state.connect4.connected);
+  const gameActive = useSelector(
+    (state: RootState) => state.connect4.activeGame
+  );
   return (
     <Container
       onClick={() => handleColumnClick(cellIndex)}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      $gameActive={gameActive}
     >
       {children === "X" && <Image src={golyored} className="drop"></Image>}
       {children === "O" && <Image src={golyoyellow} className="drop"></Image>}
@@ -40,7 +44,7 @@ const Cell: React.FC<CellProps> = ({
   );
 };
 
-const Container = styled.button`
+const Container = styled.button<{ $gameActive: boolean }>`
   padding: 0 0.5rem;
   display: flex;
   justify-content: center;
@@ -48,7 +52,7 @@ const Container = styled.button`
   background-color: transparent;
   align-items: center;
   border-color: transparent;
-  cursor: pointer;
+  cursor: ${(props) => (props.$gameActive ? "pointer" : "default")};
 `;
 
 const Round = styled.div`

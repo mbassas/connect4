@@ -12,12 +12,15 @@ const ColumnSelector = () => {
   const hoveredColumn = useSelector(
     (state: RootState) => state.connect4.hoveredColumn
   );
+  const gameActive = useSelector(
+    (state: RootState) => state.connect4.activeGame
+  );
 
   return (
     <Container>
       {Array.from({ length: columns }, (_, column) => (
         <Selector key={column}>
-          {hoveredColumn === column && (
+          {hoveredColumn === column && gameActive && (
             <img src={currentPlayer === 2 ? markerYellow : markerRed} alt="" />
           )}
         </Selector>
