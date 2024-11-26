@@ -8,10 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
 const Game = () => {
-  const currentPlayer = useSelector(
-    (state: RootState) => state.connect4.currentPlayer
-  );
-
+  const winner = useSelector((state: RootState) => state.connect4.winner);
   return (
     <>
       <Container>
@@ -21,7 +18,7 @@ const Game = () => {
         <Board />
         <Footer />
       </Container>
-      <FooterBackground $currentPlayer={currentPlayer} />
+      <FooterBackground $winner={winner} className={winner ? "bouncey2" : ""} />
     </>
   );
 };
@@ -32,14 +29,15 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const FooterBackground = styled.div<{ $currentPlayer: number }>`
+const FooterBackground = styled.div<{
+  $winner: number;
+}>`
   background-color: ${(props) =>
-    props.$currentPlayer === 0
-      ? "var(--footer-opacity)"
-      : props.$currentPlayer === 1
-      ? "var(bg-player-one)"
-      : "var(--bg-player-two)"};
-  background-color: var(--footer-opacity);
+    props.$winner === 2
+      ? "var(--bg-player-two)"
+      : props.$winner === 1
+      ? "var(--bg-player-one)"
+      : "var(--footer-opacity)"};
   height: 250px;
   border-top-left-radius: 100px;
   border-top-right-radius: 100px;
