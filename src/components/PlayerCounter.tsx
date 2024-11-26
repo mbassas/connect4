@@ -1,15 +1,25 @@
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { RootState } from "../store";
 
 const PlayerCounter: React.FC<{
   image: string;
   playerNumber: number;
   score: number;
 }> = ({ image, playerNumber, score }) => {
+  const winner = useSelector((state: RootState) => state.connect4.winner);
+  const currentPlayer = useSelector(
+    (state: RootState) => state.connect4.currentPlayer
+  );
   return (
     <>
       {playerNumber === 1 ? (
         <Container>
-          <Image src={image} alt="" />
+          <Image
+            src={image}
+            alt=""
+            className={!winner && currentPlayer === 1 ? "bouncey" : ""}
+          />
           <TextContainer>
             <H3>Player {playerNumber}</H3>
             <Score> {score} </Score>
@@ -17,7 +27,12 @@ const PlayerCounter: React.FC<{
         </Container>
       ) : (
         <Container $player2>
-          <Image src={image} alt="" $player2 />
+          <Image
+            src={image}
+            alt=""
+            $player2
+            className={!winner && currentPlayer === 2 ? "bouncey" : ""}
+          />
           <TextContainer $player2>
             <H3 $player2>Player {playerNumber}</H3>
             <Score> {score} </Score>
